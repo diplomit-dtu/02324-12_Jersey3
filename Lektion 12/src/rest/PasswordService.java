@@ -54,7 +54,7 @@ public class PasswordService {
 		return returnString;
 	}
 
-	
+	//Storing user login status in Http-Session
 	@POST
 	@Path("form")
 	public Boolean testPasswordForm(@FormParam("username") String username, @FormParam("password") String password){
