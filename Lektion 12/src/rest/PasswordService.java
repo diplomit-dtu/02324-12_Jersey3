@@ -31,14 +31,6 @@ public class PasswordService {
 	@Context
 	HttpServletRequest request;
 
-	@Path("status")
-	@GET
-	public String testLoginStatus(){
-		System.out.println(getSession());
-		return (getSession().getAttribute("user")==null)? "Bruger ikke logget ind":"Bruger " +
-		getSession().getAttribute("user") + " is logged in";
-	}
-
 	@POST
 	public Boolean testPassword(String userPass){
 		System.out.println(userPass);
@@ -52,18 +44,6 @@ public class PasswordService {
 			}
 		}
 		return returnString;
-	}
-
-	//Storing user login status in Http-Session
-	@POST
-	@Path("form")
-	public Boolean testPasswordForm(@FormParam("username") String username, @FormParam("password") String password){
-		System.out.println(username + password);
-		boolean success = testUserAndPassBoolean(username, password);
-		if (success){
-			getSession().setAttribute("user", new Boolean(true));
-		}
-		return success;
 	}
 
 	//With WebapplicationException
@@ -108,7 +88,18 @@ public class PasswordService {
 		}
 		return Response.ok().build();
 	}
-
+	
+	//Storing user login status in Http-Session
+	@POST
+	@Path("form")
+	public Boolean testPasswordForm(@FormParam("username") String username, @FormParam("password") String password){
+		System.out.println(username + password);
+		boolean success = testUserAndPassBoolean(username, password);
+		if (success){
+			request.getSession().setAttribute("login", new Boolean(true));
+		}
+		return success;
+	}
 
 	private String testUserAndPass(String username, String password) {
 		if (username==null || password==null) return "parameter mangler";
@@ -123,6 +114,14 @@ public class PasswordService {
 
 	private HttpSession getSession() {
 		return request.getSession();
+	}
+
+	@Path("status")
+	@GET
+	public String testLoginStatus(){
+		System.out.println(getSession());
+		return (getSession().getAttribute("user")==null)? "Bruger ikke logget ind":"Bruger " +
+		getSession().getAttribute("login") + " is logged in";
 	}
 
 
