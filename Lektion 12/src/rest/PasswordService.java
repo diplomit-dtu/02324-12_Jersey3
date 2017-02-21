@@ -100,6 +100,14 @@ public class PasswordService {
 		}
 		return success;
 	}
+	//Testing if Session Attribute is set
+	@Path("status")
+	@GET
+	public String testLoginStatus(){
+		System.out.println(getSession());
+		return (getSession().getAttribute("user")==null)? "Bruger ikke logget ind":"Bruger " +
+		getSession().getAttribute("login") + " is logged in";
+	}
 
 	private String testUserAndPass(String username, String password) {
 		if (username==null || password==null) return "parameter mangler";
@@ -115,15 +123,5 @@ public class PasswordService {
 	private HttpSession getSession() {
 		return request.getSession();
 	}
-
-	@Path("status")
-	@GET
-	public String testLoginStatus(){
-		System.out.println(getSession());
-		return (getSession().getAttribute("user")==null)? "Bruger ikke logget ind":"Bruger " +
-		getSession().getAttribute("login") + " is logged in";
-	}
-
-
 
 }
