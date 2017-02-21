@@ -100,11 +100,17 @@ public class PasswordService {
 		}
 		return success;
 	}
+	
+	@GET
+	@Path("logout")
+	public void logout(){
+		System.out.println("User logged out");
+		getSession().removeAttribute("login");
+	}
 	//Testing if Session Attribute is set
 	@Path("status")
 	@GET
 	public String testLoginStatus(){
-		System.out.println(getSession());
 		return (getSession().getAttribute("login")==null)? "Bruger ikke logget ind":"Bruger " +
 		getSession().getAttribute("login") + " is logged in";
 	}
