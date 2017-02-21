@@ -105,7 +105,7 @@ public class PasswordService {
 	@GET
 	public String testLoginStatus(){
 		System.out.println(getSession());
-		return (getSession().getAttribute("user")==null)? "Bruger ikke logget ind":"Bruger " +
+		return (getSession().getAttribute("login")==null)? "Bruger ikke logget ind":"Bruger " +
 		getSession().getAttribute("login") + " is logged in";
 	}
 
