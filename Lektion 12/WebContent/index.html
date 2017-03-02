@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="jquery-3.1.1.js"></script>
+<script src="jquery.serialize-object.js"></script>
+<script src="tinymce.min.js"></script>
+<script>
+
+	tinymce.init({
+		selector: '#username',
+		setup: function (editor) {
+			editor.on('change', function () {
+		    	editor.save();
+		    });
+		}
+	});
+
+function submitPass(){
+	var data = $("#loginform").serializeJSON();
+	$.ajax({
+		url : "rest/mce",
+		data : data,
+		contentType: "text/plain",
+		method: 'POST',
+		success : function(data){
+			alert(data);
+			if(data){
+				$('#maincontainer').load("useradmin.html");
+			}
+		},
+		error: function(jqXHR, text, error){
+			alert(jqXHR.status + text + error);
+		}
+	});
+	return false;
+}
+</script>
+
+</head>
+<body>
+	<form id="loginform">
+		Brugernavn: <input type="textarea" name="username" id="username">
+		Kodeord: <input type="password" name="password" id="password">
+		<input type="button" onclick="submitPass();" value="Send">
+
+	</form>
+</body>
+</html>

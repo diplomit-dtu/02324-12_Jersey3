@@ -74,7 +74,7 @@ public class PasswordService {
 	@Path("json")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response testJSONPassword(UserPass userPass){
+	public Response testJSONPassword(UserPass userPass) throws WrongPasswordException{
 		System.out.println(userPass);
 		if (userPass==null){
 			return Response.status(Status.BAD_REQUEST).entity("No credentials in request").build();
@@ -85,8 +85,13 @@ public class PasswordService {
 			} catch (JsonProcessingException e) {
 				return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Unable to parse JSON - object: " + userPass).build();
 			}
+		} else {
+			if (testUserAndPassBoolean(userPass.getuserName(), userPass.getPassword())){
+				return Response.ok().build();
+			} else {
+				throw new WrongPasswordException("Forkert kodeord");
+			}
 		}
-		return Response.ok().build();
 	}
 	
 	//Storing user login status in Http-Session
