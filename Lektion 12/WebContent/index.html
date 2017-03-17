@@ -5,24 +5,17 @@
 <title>Insert title here</title>
 <script src="jquery-3.1.1.js"></script>
 <script src="jquery.serialize-object.js"></script>
-<script src="tinymce.min.js"></script>
 <script>
-
-	tinymce.init({
-		selector: '#username',
-		setup: function (editor) {
-			editor.on('change', function () {
-		    	editor.save();
-		    });
-		}
-	});
+$(document).ready(function(){
+	checkStatus();
+});
 
 function submitPass(){
 	var data = $("#loginform").serializeJSON();
 	$.ajax({
-		url : "rest/mce",
+		url : "rest/password/json",
 		data : data,
-		contentType: "text/plain",
+		contentType: "application/json",
 		method: 'POST',
 		success : function(data){
 			alert(data);
@@ -32,19 +25,35 @@ function submitPass(){
 		},
 		error: function(jqXHR, text, error){
 			alert(jqXHR.status + text + error);
-		}
+		},
+		
+	}).always(function() {
+		checkStatus();
 	});
 	return false;
+}
+
+function checkStatus(){
+	$.get("rest/password/status", function(data, textStatus, req) {
+		$('#status').text(data);
+	})
+}
+
+function logout(){
+	$.get("rest/password/logout").always(function() {
+		checkStatus();
+	});
 }
 </script>
 
 </head>
 <body>
 	<form id="loginform">
-		Brugernavn: <input type="textarea" name="username" id="username">
+		Brugernavn: <input type="text" name="username" id="username">
 		Kodeord: <input type="password" name="password" id="password">
 		<input type="button" onclick="submitPass();" value="Send">
 
 	</form>
+	<div id="status"></div><button onclick="logout();">logout</button>
 </body>
 </html>

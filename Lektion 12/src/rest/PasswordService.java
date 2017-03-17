@@ -65,6 +65,7 @@ public class PasswordService {
 			@PathParam("password") String password) 
 			throws WrongPasswordException{
 		if(testUserAndPassBoolean(username, password)){
+			request.getSession().setAttribute("login", new Boolean(true));
 			return "Korrekt kodeord";
 		} else {
 			throw new WrongPasswordException("Forkert kodeord");
@@ -87,7 +88,8 @@ public class PasswordService {
 			}
 		} else {
 			if (testUserAndPassBoolean(userPass.getuserName(), userPass.getPassword())){
-				return Response.ok().build();
+				request.getSession().setAttribute("login", userPass.getuserName());
+				return Response.ok("Password ok").build();
 			} else {
 				throw new WrongPasswordException("Forkert kodeord");
 			}
@@ -101,7 +103,7 @@ public class PasswordService {
 		System.out.println(username + password);
 		boolean success = testUserAndPassBoolean(username, password);
 		if (success){
-			request.getSession().setAttribute("login", new Boolean(true));
+			getSession().setAttribute("login", username);
 		}
 		return success;
 	}
