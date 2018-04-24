@@ -2,58 +2,53 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Ingrediens redigering</title>
 <script src="jquery-3.1.1.js"></script>
 <script src="jquery.serialize-object.js"></script>
-<script>
-$(document).ready(function(){
-	checkStatus();
-});
-
-function submitPass(){
-	var data = $("#loginform").serializeJSON();
-	$.ajax({
-		url : "rest/password/json",
-		data : data,
-		contentType: "application/json",
-		method: 'POST',
-		success : function(data){
-			alert(data);
-			if(data){
-				$('#maincontainer').load("useradmin.html");
-			}
-		},
-		error: function(jqXHR, text, error){
-			alert(jqXHR.status + text + error);
-		},
-		
-	}).always(function() {
-		checkStatus();
-	});
-	return false;
-}
-
-function checkStatus(){
-	$.get("rest/password/status", function(data, textStatus, req) {
-		$('#status').text(data);
-	})
-}
-
-function logout(){
-	$.get("rest/password/logout").always(function() {
-		checkStatus();
-	});
-}
-</script>
-
+<script src="ingredientedit.js"></script>
 </head>
 <body>
-	<form id="loginform">
-		Brugernavn: <input type="text" name="username" id="username">
-		Kodeord: <input type="password" name="password" id="password">
-		<input type="button" onclick="submitPass();" value="Send">
+	<DIV class="container">
+		<h1>Opret ingrediens</h1>
+		<form id="ingredientform">
+			<div>
+				<label for="id">ID: </label> <input type="number"
+					id="id" name="id">
+			</div>
+			<div>
+				<label for="name">Navn: </label><input type="text"
+					id="name" name="name">
+			</div>
+			<div>
+				<label for="amount">Mængde: </label><input type="number"
+					id="amount" name="amount">
+			</div>
+			<button onclick="createIngredient();">Gem ændringer</button>
+		</form>
+	</DIV>
+	<!-- Ingredients -->
+	<div class="container" id="ingredients">
+	<h1>Ingredienser</h1>
+		<table>
+			<thead>
+				<tr>
+					<td>ID</td>
+					<td>Navn</td>
+					<td>Mængde</td>
+					<!-- <td>Slet ingrediens<td> -->
+				</tr>
+			</thead>
+			<tbody id="ingredienttablebody">
 
-	</form>
-	<div id="status"></div><button onclick="logout();">logout</button>
+			</tbody>
+		</table>
+		<hr>
+		<form>
+		Slet ingrediens med ID:
+		<input type="number" id="deleteid">
+		<button onclick="deleteIngredient();">Slet ingrediens</button>
+		</form>
+	</div>
+
 </body>
 </html>
