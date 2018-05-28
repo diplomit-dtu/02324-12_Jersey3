@@ -36,25 +36,26 @@ public class IngredientService {
     }
     
     @POST
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response addIngredientJson(Ingredient ingredient) throws InvalidIdException {
-        if (ingredients.putIfAbsent(ingredient.getId(), ingredient) == null)
-        	return Response.ok().build();
-        else {
+    public Ingredient addIngredientJson(Ingredient ingredient) throws InvalidIdException {
+        if (ingredients.putIfAbsent(ingredient.getId(), ingredient) != null) {
+
+            //Throw homemade InvalidIdException
         	throw new InvalidIdException("ID " + ingredient.getId() + " er allerede i brug");        	
-        	/*
-        	Response response = Response
-        			.status(Status.BAD_REQUEST)
-        			.entity("Id " + ingredient.getId() + " er i brug")
-        			.build();
-        			
-        	//Throw WebApplicationException
-        	throw new WebApplicationException(response);
-        	
-        	//Return response
-        	return response;
-        	*/
+
+//        	Response response = Response
+//        			.status(Status.BAD_REQUEST)
+//        			.entity("Id " + ingredient.getId() + " er i brug")
+//        			.build();
+//
+//        	//Throw WebApplicationException
+//        	throw new WebApplicationException(response);
+
+//        	//Return response
+//        	return response;
+
         }
+
+        return ingredient;
     }
     
     @DELETE
